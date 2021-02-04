@@ -1,6 +1,9 @@
 import requests
 import os
+import pprint
 
 key = os.environ['key']
 
-print(key)
+token = os.environ['token']
+
+print(token)
