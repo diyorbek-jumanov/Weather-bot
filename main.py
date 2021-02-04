@@ -23,13 +23,13 @@ def Weather(text):
     respons_w = requests.get(url=url_w, params=payload)
     data_w = respons_w.json()
     print(respons_w.url)
-    pprint(data_w)
+    # pprint(data_w)
 
     full_data_w = list()
     full_data_w.append(data_w['name'])
     full_data_w.append(data_w['main']['temp'] - 273)
-    full_data_w.append(data_w['weather']['description'])
-    full_data_w.append(data_w['weather']['icon'])
+    full_data_w.append(data_w['weather'][0]['description'])
+    full_data_w.append(data_w['weather'][0]['icon'])
     full_data_w.append(data_w['wind']['speed'])
 
     return full_data_w
@@ -49,10 +49,10 @@ msg_id = Updates()['message']['message_id']
 while True:
     data = Updates()
     last_msg_id = data['message']['message_id']
-    msg_text = data['message']['text'].title()
-    chat_id = data['message']['from']['id']
-
+    
     if msg_id != last_msg_id:
+        msg_text = data['message']['text'].title()
+        chat_id = data['message']['from']['id']
         w_d = Weather(msg_text)
         w_from = w_d[0]
         w_temp = w_d[1]
@@ -60,7 +60,7 @@ while True:
         w_icon = w_d[3]
         w_w = w_d[4]
         
-        send_msg_text = f"from: {w_from}\nTemp: {w_temp} {w_icon}\ndescription: {w_description}\nWind: {w_w}"
+        send_msg_text = f"from: {w_from}\nTemp: {round(w_temp, 2)} {w_icon}\ndescription: {w_description}\nWind: {w_w} m/s"
 
         SendMessage(chat_id, send_msg_text)
 
